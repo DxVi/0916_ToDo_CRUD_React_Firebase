@@ -1,0 +1,12 @@
+.todo{
+    display:flex;
+    align-items: center;
+    border:1px solid gold;
+    box-shadow:2px 2px 5px black;
+    height: 50px;
+}
+
+.todo__list{
+    color: dodgerblue;
+    margin: 1px;
+}
