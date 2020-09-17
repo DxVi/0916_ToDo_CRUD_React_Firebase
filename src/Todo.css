@@ -1,12 +1,27 @@
 .todo{
-    display:flex;
-    align-items: center;
-    border:1px solid gold;
     box-shadow:2px 2px 5px black;
-    height: 50px;
+    padding: 5px;
+    border-radius: 16px;
+    background: linear-gradient(145deg, #4da7db, #5bc6ff);
+    opacity: .80;
+    width: 100%;
 }
 
-.todo__list{
-    color: dodgerblue;
-    margin: 1px;
+.todo:hover{
+    background: linear-gradient(145deg, dodgerblue, salmon);
+}
+
+.todo__icons{
+    cursor: pointer;
+}
+
+.todo__items{
+    display: flex;
+    justify-content: space-between;
+    padding: 2px;
+}
+ 
+.todo__items p{
+    font-size: larger;
+    color:#333333;
 }

@@ -2,12 +2,11 @@ import React, { useState } from 'react'
 import "./Todo.css";
 import { makeStyles } from "@material-ui/core/styles";
 import db from "./firebase";
-import { Button, List, ListItem, ListItemText, Modal } from '@material-ui/core';
+import { Button, List,   Modal } from '@material-ui/core';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
+import EditIcon from '@material-ui/icons/Edit';
 
-function Todo(props) {
-
-    const useStyles = 
+const useStyles = 
         makeStyles(
             theme => ({
                 paper: {
@@ -21,6 +20,7 @@ function Todo(props) {
             })
         )
 
+function Todo(props) {
     const classes = useStyles();
     const [open, setOpen] = useState(false);
     const [input, setInput] = useState('');
@@ -37,7 +37,8 @@ function Todo(props) {
 
     return (
         <div className="todo">
-        {/* <Modal
+
+        <Modal
             open = {open}
             onClose = {event => setOpen(false)}
         >
@@ -52,26 +53,26 @@ function Todo(props) {
                     Update Todo
                 </Button>
             </div>
-        </Modal> */}
-
-             <List className = "todo__list">
-                <ListItem>
-                    <ListItemText 
-                        primary = {props.text}
-                        // secondary = "target date"
+        </Modal>
+ 
+            <div className="todo__items">
+                <div>
+                    <p>{props.todo.todo}</p>
+                </div>
+                <div className="todo__icons">
+                    <EditIcon 
+                        color="primary"
+                        onClick = {event => setOpen(true)}
                     />
-                    <button onClick = {event => setOpen(true)}>Edit Me</button>
-                </ListItem>
-            
-                {/* <DeleteForeverIcon
-                    onClick = {event => db.collection("todos").doc(props.todo.id).delete()}
-                >
-                    Delete Me
-                </DeleteForeverIcon> */}
-            </List>
+                    <DeleteForeverIcon 
+                        color="secondary"
+                        onClick = {event => db.collection("todos").doc(props.todo.id).delete()}    
+                    />
+                </div>
+            </div>
         </div>
     )
 }
 
-    
+ 
 export default Todo
