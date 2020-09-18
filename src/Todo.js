@@ -39,8 +39,6 @@ function Todo(props) {
         <Modal
             open = {open}
             onClose = {event => setOpen(false)}
-            border = "2px solid red"
-            background-color="red"
         >
             <form>
                 
