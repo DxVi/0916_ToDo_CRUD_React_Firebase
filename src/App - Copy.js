@@ -7,25 +7,37 @@ import firebase from "firebase";
 
 
 function App() {
-  // const [todos, setTodos] = useState(['read books','take a walk','watch netflix','code react']);
-  const [todos, setTodos] = useState([]);
+  const [todos, setTodos] = useState(['read books','take a walk','watch netflix','code react']);
+  // const [todos, setTodos] = useState([]);
   const [input, setInput] = useState('');
+  const runlocal=true;
 
   const addTodo = (event) => {
     event.preventDefault();
-    //---> add to firebase
-    db.collection('todos').add({
-      todo: input,
-      timestamp: firebase.firestore.FieldValue.serverTimestamp()
-    })
+      if (runlocal){
+        //---> add to local array
+        setTodos([...todos, input]);
+      }else{
+        //---> add to firebase
+        db.collection('todos').add({
+          todo: input,
+          timestamp: firebase.firestore.FieldValue.serverTimestamp()
+        })
+      }
       setInput('');
   }
+
   
   useEffect(() => {
     // -- code fires when app loads. run once if no condition
-    db.collection("todos").orderBy("timestamp", "desc").onSnapshot(snapshot => {
+    if (runlocal){
+      // do nothing
+    }else{
+      setTodos([]);
+      db.collection("todos").orderBy("timestamp", "desc").onSnapshot(snapshot => {
         setTodos(snapshot.docs.map(doc => ({id: doc.id, todo: doc.data().todo})))
-    })
+      }) 
+    }
   }, []);
 
   return (
@@ -51,7 +63,8 @@ function App() {
           </div>
           <List>
             {todos.map (todo => (
-              <Todo todo={todo}/>
+              <Todo runlocal={runlocal} todo={todo}/>
+               
               ))
             }
           </List>

@@ -1,8 +1,9 @@
 import React, { useState } from 'react'
 import "./Todo.css";
-import { makeStyles } from "@material-ui/core/styles";
+
 import db from "./firebase";
-import { Button, List,   Modal } from '@material-ui/core';
+import { makeStyles } from "@material-ui/core/styles";
+import { Button, Modal } from '@material-ui/core';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import EditIcon from '@material-ui/icons/Edit';
 
@@ -16,22 +17,19 @@ const useStyles =
                     border: "2px solid #000",
                     boxShadow: theme.shadows[5],
                     padding: theme.spacing(2,4,3)
-                }
+                },
             })
         )
 
 function Todo(props) {
+
     const classes = useStyles();
     const [open, setOpen] = useState(false);
-    const [input, setInput] = useState('');
+    const [input, setInput] = useState(props.todo.todo);
     
-    const handleOpen = () => {
-        setOpen(true);
-    }
-
-    const UpdateTodo = () => {
-        // update todo with the new input text
-        db.collections("todos").doc(props.todo.id).set({todo: input}, {merge: true})
+   
+    const updateTodo = () => {
+        db.collection("todos").doc(props.todo.id).set({todo: input}, {merge: true});
         setOpen(false);
     }
 
@@ -41,18 +39,28 @@ function Todo(props) {
         <Modal
             open = {open}
             onClose = {event => setOpen(false)}
+            border = "2px solid red"
+            background-color="red"
         >
-            <div className={classes.paper}>
-                <input 
-                    placeholder = {props.todo.todo}
-                    value = {input}
-                    onChange = {event => setInput(event.target.value)}
-                />
-
-                <Button onClick = {event => setOpen(false)}>
-                    Update Todo
-                </Button>
-            </div>
+            <form>
+                
+                    <div className={classes.paper}>
+                        <h2>Update ToDo:</h2>
+                        <input 
+                            placeholder = {props.todo.todo}
+                            value = {input}
+                            onChange = {event => setInput(event.target.value)}
+                        />
+                          <Button
+                            // disabled = {!input}
+                            type = "submit"
+                            onClick = {updateTodo}
+                            variant = "contained"
+                            color = "primary"
+                            >Update Todo</Button>
+                    </div>
+                
+            </form>
         </Modal>
  
             <div className="todo__items">
@@ -66,7 +74,9 @@ function Todo(props) {
                     />
                     <DeleteForeverIcon 
                         color="secondary"
-                        onClick = {event => db.collection("todos").doc(props.todo.id).delete()}    
+                        onClick = {
+                                    event => db.collection("todos").doc(props.todo.id).delete()
+                                  }    
                     />
                 </div>
             </div>
